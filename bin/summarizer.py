@@ -8,6 +8,7 @@ Created on Sat Sep 19 13:13:42 2020
 
 import yaml
 import numpy as np
+from preprocessor import PreprocessDoc
 
 class SummarizeDoc:
     
@@ -16,19 +17,18 @@ class SummarizeDoc:
             self.config = yaml.load(fl)
         
     def loadDocs(self,filePath):
-        with open(filePath,'r') as fl:
+        with open(filePath,'r',encoding='utf-8') as fl:
             text = fl.read()
         return text
     
     def splitSentences(self,text):
         """
         Split paragraph into an array of sentences
-        -------------
+        
         Input:
             text: string
         Output:
             sentences: a list of string
-        -------------
         """
         sentences = text.split('.')
         return sentences
@@ -37,29 +37,35 @@ class SummarizeDoc:
         firstSent, restOfSent = sentences[0], sentences[1:]
         return firstSent, restOfSent
     
-    def findsentlen(self,text):
+    def findSentLength(self,text):
         return text.split()
     
-    def findsentlenarray(self,sentences):
-        return[self.findsentlen(sent) for sent in sentences ]
+    def findSentLenghtArray(self,sentences):
+        return [self.findSentLength(sent) for sent in sentences]
     
-    def findtopsentence(self,sentlents,sentences,n):
-        sortedidx =np.argsort(sentlents)
-        top3idx = sortedidx[-n:]
-        top3sentences =[sentences[i] for i in top3idx]
-        return top3sentences
+    def findTopSentences(self,sentLengths,sentences,n):
+        sortedIdx = np.argsort(sentLengths)
+        topnIdx = sortedIdx[-n:]
+        topnSentences = [sentences[i] for i in topnIdx]
+        return topnSentences
     
-    def findsumm(self):
+    def preprocess(self,text):
+        preprocessObj = PreprocessDoc()
+        filteredText = preprocessObj.removeSpclChar(text)
+        filteredText = preprocessObj.convertToLower(filteredText)
+        return filteredText
+    
+    def findSummary(self):
         filePath = self.config['data_path']['train_data']
         text = self.loadDocs(filePath)
-        sentences = self.splitSentences(text)
-        firstSent,restOfSent =self.groupSentences(sentences)
-        sentLent =self.findsentlenarray(restOfSent)
-        topsentence = self.findtopsentence(sentLent,restOfSent,self.config['sentence_num'])
-        allsentences =[firstSent] + topsentence
-        summary = ' '.join(allsentences)
+        filteredText = self.preprocess(text)
+        sentences = self.splitSentences(filteredText)
+        firstSent,restOfSent = self.groupSentences(sentences)
+        sentLengths = self.findSentLenghtArray(restOfSent)
+        topnSentences = self.findTopSentences(sentLengths,restOfSent,self.config['sentence_num'])
+        allSentences = [firstSent] + topnSentences
+        summary = '. '.join(allSentences)
         return summary
         
-
 summarizeObj = SummarizeDoc()
-summarizeObj.loadConfig()
+summary = summarizeObj.findSummary()

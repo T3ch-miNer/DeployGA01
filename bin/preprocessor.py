@@ -4,18 +4,23 @@ Created on Sat Sep 19 13:03:41 2020
 
 @author: rahul
 """
-import re 
+import re
 
-class ProcessDoc:
+class PreprocessDoc:
     """
-    Module for preprocessing arcticles
+    Module for preprocessin articles
     """
-    def removeSpecChar():
-        pass
-    
-    def tokeniz():
-        pass
-    
-    def stopword_remve():
-        pass
-    
+    def removeSpclChar(self,text):
+        """
+        Remove special Characters
+        
+        Input:
+            text: string
+        Output:
+            modifiedText: string
+        """
+        filteredText = re.sub(',|;|#|$','',text)
+        return filteredText
+
+    def convertToLower(self,text):
+        return text.lower()
