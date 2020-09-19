@@ -1,0 +1,6 @@
+data_path:
+    train_data: F:\greyatom\Deployment\Pro1\data\train
+    test_data: F:\greyatom\Deployment\Pro1\data\test
+    
+sentence_num : 3
+
