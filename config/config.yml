@@ -1,4 +1,4 @@
 data_path:
-  train_data: F:/greyatom/Deployment/Pro1/data/train/article1.txt
-  test_data:  F:/greyatom/Deployment/Pro1/data/test/article1.txt
+  train_data: ../data/train/article1.txt
+  test_data:  ../data/test/article1.txt
 sentence_num: 3
