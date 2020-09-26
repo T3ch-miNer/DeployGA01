@@ -1,4 +1,6 @@
-numpy
-ntlk 
+numpy 
+nltk
 tweepy
 textblob
+flask
+sklearn
