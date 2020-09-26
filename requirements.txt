@@ -4,4 +4,4 @@ tweepy
 textblob
 flask
 sklearn
-pyyaml
+PyYAML
